@@ -184,6 +184,16 @@ body {
   color: var(--chart-line);
   transform: none;
 }
+/* Bouton "← Fermer" dans le header sombre du journal */
+#btn-logbook-close {
+  background: rgba(245,240,224,0.15);
+  color: var(--chart-bg);
+  border-color: rgba(245,240,224,0.35);
+}
+#btn-logbook-close:hover {
+  background: rgba(245,240,224,0.28);
+  color: var(--chart-bg);
+}
 
 .btn-option {
   display: flex;
