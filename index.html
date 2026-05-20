@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="La Chasse au Trésor du Vieux Corsaire — Le Palan d'Argent. Un jeu d'aventure maritime dans les îles anglo-normandes.">
+  <title>Le Palan d'Argent — La Chasse au Trésor du Vieux Corsaire</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HUD barre de progression -->
+<div class="hud" aria-hidden="true">
+  <div class="hud-bar" style="width:0%"></div>
+</div>
+
+<!-- Notification fragment -->
+<div id="fragment-notif" class="fragment-notif" aria-live="polite"></div>
+
+<!-- ============================================================
+     ÉCRAN TITRE
+     ============================================================ -->
+<section id="screen-title" class="screen" aria-label="Écran titre">
+  <div class="title-logo" aria-hidden="true">⛵</div>
+  <h1 class="title-main">La Chasse au Trésor<br>du Vieux Corsaire</h1>
+  <p class="title-sub">Le Palan d'Argent</p>
+  <p class="title-desc">
+    Un vieux loup de mer cébèche a caché son or dans les îles anglo-normandes.
+    Appareille depuis Cherbourg, résous ses énigmes de port en port,
+    et ramène le trésor avant que la marée tourne.
+  </p>
+  <div style="display:flex;flex-direction:column;gap:0.8rem;align-items:center">
+    <button id="btn-start" class="btn btn-primary" aria-label="Commencer la partie">
+      ⚓ Appareiller
+    </button>
+    <button id="btn-continue" class="btn btn-secondary" style="display:none" aria-label="Reprendre la partie">
+      🗺️ Reprendre la route
+    </button>
+    <button id="btn-reset-title" class="btn btn-secondary" style="font-size:0.85rem;padding:0.5rem 1rem" aria-label="Recommencer">
+      🔄 Nouvelle partie
+    </button>
+  </div>
+  <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:2rem;font-family:var(--font-ui)">
+    7–8 escales · 45–90 min · Sauvegarde automatique
+  </p>
+</section>
+
+<!-- ============================================================
+     ÉCRAN PROLOGUE
+     ============================================================ -->
+<section id="screen-prologue" class="screen" aria-label="Prologue">
+  <div class="prologue-card">
+    <h2>📜 Carnet de bord — Chambre des cartes, La Chantereyne</h2>
+    <p class="prologue-text" id="prologue-text"></p>
+    <div style="display:flex;justify-content:flex-end;margin-top:2rem">
+      <button id="btn-prologue-next" class="btn btn-primary">
+        Larguer les amarres →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÉCRAN CARTE PRINCIPALE
+     ============================================================ -->
+<section id="screen-map" class="screen" aria-label="Carte de navigation">
+  <div class="map-header">
+    <h2>🗺️ Carte de la Manche</h2>
+    <div style="display:flex;gap:0.5rem;align-items:center">
+      <span id="map-progress" style="font-family:var(--font-ui);font-size:0.8rem;opacity:0.7"></span>
+    </div>
+  </div>
+
+  <div class="map-container">
+    <!-- Carte SVG principale -->
+    <svg id="main-map" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"
+         aria-label="Carte marine interactive des îles anglo-normandes"
+         role="img">
+
+      <!-- Fond mer -->
+      <defs>
+        <linearGradient id="sea-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a3a5c"/>
+          <stop offset="100%" stop-color="#2a5280"/>
+        </linearGradient>
+        <pattern id="wave-pattern" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
+          <path d="M0,10 Q10,0 20,10 Q30,20 40,10" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        </pattern>
+      </defs>
+
+      <rect width="800" height="600" fill="url(#sea-grad)"/>
+      <rect width="800" height="600" fill="url(#wave-pattern)"/>
+
+      <!-- Isobathes (simplifiées) -->
+      <ellipse cx="400" cy="300" rx="350" ry="260" fill="none" stroke="#2a5a8a" stroke-width="0.5" opacity="0.4"/>
+      <ellipse cx="400" cy="300" rx="300" ry="220" fill="none" stroke="#2a5a8a" stroke-width="0.5" opacity="0.3"/>
+
+      <!-- Côte du Cotentin (nord → est) -->
+      <path d="M 80,20 Q 100,15 120,18 Q 160,22 180,30 Q 220,40 240,45
+               Q 280,55 310,60 Q 340,65 360,72 Q 380,80 390,90
+               Q 400,100 410,115 Q 415,125 420,140
+               L 425,155 Q 425,160 430,165 Q 440,175 450,185
+               Q 460,200 465,210 Q 470,230 475,250
+               Q 480,280 490,310 Q 500,340 510,360
+               Q 515,375 520,390 L 525,405 Q 525,410 524,415
+               Q 520,430 515,445 Q 510,460 505,470
+               L 502,480 Q 500,490 498,495"
+            fill="#e8dcc8" stroke="#2c3e50" stroke-width="1.5"/>
+
+      <!-- Label côte -->
+      <text x="280" y="30" font-size="11" fill="#6c8a9a" font-style="italic"
+            font-family="Georgia, serif" opacity="0.8">Côte du Cotentin</text>
+
+      <!-- Raz Blanchard (mention) -->
+      <text x="60" y="180" font-size="9" fill="#c0392b" font-style="italic"
+            font-family="Courier New, monospace" transform="rotate(-30,60,180)" opacity="0.8">
+        Raz Blanchard
+      </text>
+      <!-- Courant -->
+      <path d="M 55,200 Q 70,195 85,200 Q 100,205 115,200" fill="none"
+            stroke="#c0392b" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+
+      <!-- Archipel Chausey -->
+      <ellipse cx="270" cy="440" rx="22" ry="14" fill="#e8dcc8" stroke="#2c3e50" stroke-width="1"/>
+      <text x="270" y="465" text-anchor="middle" font-size="9" fill="#6c8a9a" font-style="italic">Chausey</text>
+
+      <!-- Jersey -->
+      <ellipse cx="170" cy="520" rx="45" ry="25" fill="#e8dcc8" stroke="#2c3e50" stroke-width="1.2"/>
+      <text x="170" y="548" text-anchor="middle" font-size="10" fill="#6c8a9a" font-style="italic">Jersey</text>
+
+      <!-- Guernesey -->
+      <ellipse cx="40" cy="460" rx="30" ry="18" fill="#e8dcc8" stroke="#2c3e50" stroke-width="1.2"/>
+      <text x="40" y="485" text-anchor="middle" font-size="9" fill="#6c8a9a" font-style="italic">Guernesey</text>
+
+      <!-- Aurigny -->
+      <ellipse cx="65" cy="270" rx="22" ry="12" fill="#e8dcc8" stroke="#2c3e50" stroke-width="1"/>
+      <text x="65" y="292" text-anchor="middle" font-size="9" fill="#6c8a9a" font-style="italic">Aurigny</text>
+
+      <!-- Routes de navigation (pointillés) -->
+      <g opacity="0.25" stroke="#f5f0e0" stroke-width="1" stroke-dasharray="6,4" fill="none">
+        <!-- Cherbourg → Barfleur -->
+        <path d="M 176,72 Q 230,55 304,48"/>
+        <!-- Barfleur → Saint-Vaast -->
+        <path d="M 304,48 Q 340,60 368,132"/>
+        <!-- Saint-Vaast → Aurigny -->
+        <path d="M 368,132 Q 300,180 65,252"/>
+        <!-- Aurigny → Granville -->
+        <path d="M 65,252 Q 200,300 400,408"/>
+        <!-- Granville → Chausey -->
+        <path d="M 400,408 Q 360,420 270,440"/>
+        <!-- Chausey → Saint-Hélier -->
+        <path d="M 270,440 Q 240,480 176,510"/>
+        <!-- Saint-Hélier → Saint-Peter Port -->
+        <path d="M 176,510 Q 120,490 64,459"/>
+      </g>
+
+      <!-- PORTS — groupes cliquables -->
+
+      <!-- 0 · Cherbourg (22%, 12%) = x=176, y=72 -->
+      <g id="port-cherbourg" class="map-port locked" role="button" tabindex="0"
+         aria-label="Cherbourg-Chantereyne — Port de départ">
+        <circle cx="176" cy="72" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="176" y="58" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">Cherbourg</text>
+        <!-- Phare clignotant -->
+        <circle cx="186" cy="65" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8"/>
+      </g>
+
+      <!-- 1 · Barfleur (38%, 8%) = x=304, y=48 -->
+      <g id="port-barfleur" class="map-port locked" role="button" tabindex="0"
+         aria-label="Barfleur — Phare historique">
+        <circle cx="304" cy="48" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="304" y="34" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">Barfleur</text>
+        <circle cx="314" cy="41" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:0.5s"/>
+      </g>
+
+      <!-- 2 · Saint-Vaast (46%, 22%) = x=368, y=132 -->
+      <g id="port-saint-vaast" class="map-port locked" role="button" tabindex="0"
+         aria-label="Saint-Vaast-la-Hougue — Île Tatihou">
+        <circle cx="368" cy="132" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="368" y="118" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">St-Vaast</text>
+        <circle cx="378" cy="125" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:1s"/>
+      </g>
+
+      <!-- 3 · Aurigny (8%, 42%) = x=64, y=252 -->
+      <g id="port-aurigny" class="map-port locked" role="button" tabindex="0"
+         aria-label="Braye Harbour, Aurigny">
+        <circle cx="64" cy="252" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="64" y="238" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">Aurigny</text>
+        <circle cx="74" cy="245" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:1.5s"/>
+      </g>
+
+      <!-- 4 · Granville (50%, 68%) = x=400, y=408 -->
+      <g id="port-granville" class="map-port locked" role="button" tabindex="0"
+         aria-label="Granville — Porte abattante">
+        <circle cx="400" cy="408" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="400" y="394" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">Granville</text>
+        <circle cx="410" cy="401" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:2s"/>
+      </g>
+
+      <!-- 5 · Chausey (35%, 75%) = x=280, y=450 -->
+      <g id="port-chausey" class="map-port locked" role="button" tabindex="0"
+         aria-label="Sound de Chausey">
+        <circle cx="280" cy="450" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="280" y="436" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">Chausey</text>
+        <polygon points="280,428 274,440 286,440" fill="#f39c12" opacity="0.6"/>
+      </g>
+
+      <!-- 6 · Saint-Hélier (22%, 85%) = x=176, y=510 -->
+      <g id="port-saint-helier" class="map-port locked" role="button" tabindex="0"
+         aria-label="Saint-Hélier, Jersey">
+        <circle cx="176" cy="510" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="176" y="496" text-anchor="middle" font-size="10" fill="white"
+              font-family="Georgia,serif" font-weight="bold">St-Hélier</text>
+        <circle cx="186" cy="503" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:0.8s"/>
+      </g>
+
+      <!-- 7 · Saint-Peter Port (5%, 72%) = x=64, y=432 — repositionné sur Guernesey -->
+      <g id="port-saint-peter-port" class="map-port locked" role="button" tabindex="0"
+         aria-label="Saint-Peter Port, Guernesey — Destination finale">
+        <circle cx="44" cy="458" r="9" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="44" y="444" text-anchor="middle" font-size="9" fill="white"
+              font-family="Georgia,serif" font-weight="bold">St-Peter Port</text>
+        <text x="44" y="455" text-anchor="middle" font-size="7" fill="#f39c12">🏆</text>
+        <circle cx="54" cy="451" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.8" style="animation-delay:2.5s"/>
+      </g>
+
+      <!-- Voilier (icône SVG) -->
+      <g id="boat-svg" transform="translate(166,54)">
+        <text font-size="18" fill="white" opacity="0.9">⛵</text>
+      </g>
+
+      <!-- Rose des vents -->
+      <g transform="translate(740,540)">
+        <circle cx="0" cy="0" r="20" fill="rgba(245,240,224,0.15)" stroke="rgba(245,240,224,0.3)" stroke-width="1"/>
+        <text x="0" y="-24" text-anchor="middle" font-size="10" fill="white" font-weight="bold">N</text>
+        <text x="24" y="4" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">E</text>
+        <text x="-24" y="4" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">O</text>
+        <text x="0" y="30" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">S</text>
+        <line x1="0" y1="-18" x2="0" y2="18" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
+        <line x1="-18" y1="0" x2="18" y2="0" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
+      </g>
+
+      <!-- Titre carte -->
+      <text x="400" y="585" text-anchor="middle" font-size="9"
+            fill="rgba(245,240,224,0.4)" font-family="Courier New, monospace" letter-spacing="2">
+        CARTE MARINE — MANCHE OCCIDENTALE — © Le Palan d'Argent
+      </text>
+    </svg>
+
+    <!-- Aperçu carte au trésor -->
+    <div class="treasure-map-preview" aria-label="Fragments de carte au trésor collectés">
+      <div id="treasure-preview-svg"></div>
+    </div>
+  </div>
+
+  <div class="map-actions">
+    <button id="btn-logbook" class="btn btn-secondary">📖 Journal de bord</button>
+    <button id="btn-restart-map" class="btn btn-secondary" style="font-size:0.85rem">🔄 Recommencer</button>
+  </div>
+  <p id="map-progress-label" style="color:rgba(255,255,255,0.5);font-size:0.8rem;font-family:var(--font-ui);text-align:center;padding:0.5rem">
+    Clique sur un port disponible pour y faire escale
+  </p>
+</section>
+
+<!-- ============================================================
+     ÉCRAN NAVIGATION (SAILING)
+     ============================================================ -->
+<section id="screen-sailing" class="screen" aria-label="Navigation en cours">
+  <div class="sailing-content">
+    <div class="sailing-boat" aria-hidden="true">⛵</div>
+    <p class="sailing-text">En route vers…</p>
+    <p class="sailing-dest" id="sailing-dest">—</p>
+    <div class="nav-progress">
+      <div class="nav-progress-bar"></div>
+    </div>
+    <p style="font-size:0.85rem;opacity:0.5;font-family:var(--font-ui)">
+      Borde ton foc et tiens le cap…
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÉCRAN PORT — Dialogue PNJ
+     ============================================================ -->
+<section id="screen-port" class="screen" aria-label="Escale">
+  <div class="port-card">
+    <div class="port-header">
+      <span class="port-emoji" id="port-pnj-emoji" aria-hidden="true">⚓</span>
+      <div>
+        <h2 id="port-name">Port</h2>
+        <div class="port-region" id="port-region"></div>
+      </div>
+    </div>
+
+    <div class="port-scene">
+      <div class="pnj-bubble" id="pnj-bubble" data-pnj="PNJ">
+        <p class="pnj-text" id="pnj-text">…</p>
+      </div>
+    </div>
+
+    <div class="port-actions">
+      <button id="btn-port-map" class="btn btn-secondary">← Carte</button>
+      <button id="btn-port-continue" class="btn btn-secondary">Continuer →</button>
+      <button id="btn-port-riddle" class="btn btn-primary" style="display:none">Affronter l'énigme →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÉCRAN ÉNIGME
+     ============================================================ -->
+<section id="screen-riddle" class="screen" aria-label="Énigme">
+  <div class="riddle-card">
+    <div class="riddle-header">
+      <h3 id="riddle-port-name">Énigme</h3>
+      <div class="tries-indicator" aria-label="Essais restants">
+        <div class="try-dot" aria-hidden="true"></div>
+        <div class="try-dot" aria-hidden="true"></div>
+        <div class="try-dot" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="riddle-body">
+      <!-- Texte de l'énigme -->
+      <div class="riddle-text" id="riddle-text" role="region" aria-label="Énoncé de l'énigme"></div>
+
+      <!-- Zone choix multiple -->
+      <div id="zone-multiple" style="display:none">
+        <div id="options-list" role="group" aria-label="Options de réponse"></div>
+      </div>
+
+      <!-- Zone réponse libre -->
+      <div id="zone-free" style="display:none">
+        <div class="free-answer-wrap">
+          <label for="free-input" class="visually-hidden">Ta réponse</label>
+          <input type="text" id="free-input" class="free-answer-input"
+                 placeholder="Tape ta réponse ici…"
+                 autocomplete="off" autocorrect="off" spellcheck="false"
+                 aria-label="Saisir ta réponse">
+          <button id="btn-free-submit" class="btn btn-primary">Valider ⚓</button>
+        </div>
+      </div>
+
+      <!-- Zone clic carte (Chausey) -->
+      <div id="zone-click" style="display:none">
+        <div id="chausey-map-wrap" class="chausey-map-wrap" role="button"
+             aria-label="Clique sur la Pyramide de Chausey dans la carte">
+          <div id="chausey-map-svg"></div>
+        </div>
+      </div>
+
+      <!-- Zone drag & drop (finale) -->
+      <div id="zone-dragdrop" style="display:none">
+        <div class="dragdrop-wrap">
+          <!-- Fragments disponibles -->
+          <div>
+            <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;text-align:center;font-family:var(--font-ui)">
+              FRAGMENTS DISPONIBLES
+            </p>
+            <div id="fragments-pool" class="fragments-pool" aria-label="Fragments de carte à placer"></div>
+          </div>
+          <!-- Grille cible -->
+          <div>
+            <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;text-align:center;font-family:var(--font-ui)">
+              CARTE AU TRÉSOR
+            </p>
+            <div id="grid-target" class="grid-target" aria-label="Grille de la carte au trésor"></div>
+          </div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-light);text-align:center;margin-top:0.75rem;font-style:italic">
+          Glisse chaque fragment dans la grille pour recomposer la carte
+        </p>
+      </div>
+
+      <!-- Feedback -->
+      <div id="riddle-feedback" class="feedback-box" role="alert" aria-live="polite"></div>
+    </div>
+
+    <div class="riddle-actions">
+      <div style="display:flex;gap:0.6rem">
+        <button id="btn-riddle-map" class="btn btn-secondary">← Carte</button>
+        <button id="btn-hint" class="btn btn-hint" style="display:none">
+          💡 Indice
+        </button>
+      </div>
+      <button id="btn-riddle-next" class="btn btn-primary" style="display:none">
+        Port suivant →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     JOURNAL DE BORD
+     ============================================================ -->
+<section id="screen-logbook" class="screen" aria-label="Journal de bord">
+  <div class="logbook-inner" style="max-width:720px;width:100%">
+    <div class="logbook-header">
+      <h2 style="font-family:var(--font-ui);font-size:0.9rem;text-transform:uppercase;letter-spacing:0.1em">
+        📖 Journal de Bord — Hippolyte Kergoat
+      </h2>
+      <button id="btn-logbook-close" class="btn btn-secondary" style="padding:0.4rem 0.8rem;font-size:0.85rem">
+        ← Fermer
+      </button>
+    </div>
+    <div class="logbook-entries" id="logbook-entries">
+      <p style="color:var(--text-light);font-style:italic">Chargement…</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÉCRAN FIN DU JEU
+     ============================================================ -->
+<section id="screen-endgame" class="screen" aria-label="Fin du jeu">
+  <div class="endgame-card">
+    <div class="endgame-anchor" aria-hidden="true">⚓</div>
+    <h1>Le Trésor du Palan</h1>
+    <p style="font-family:var(--font-ui);font-size:0.8rem;color:var(--text-light);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.1em">
+      Les Minquiers — Destination finale
+    </p>
+    <p class="endgame-text" id="endgame-text"></p>
+
+    <!-- Carte au trésor complète -->
+    <div style="max-width:200px;margin:0 auto 2rem;background:var(--chart-bg);border:2px solid var(--gold);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)">
+      <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="140" fill="#f5f0e0"/>
+        <!-- Carte stylisée des Minquiers -->
+        <text x="100" y="50" text-anchor="middle" font-size="28" fill="#f39c12">🏴‍☠️</text>
+        <text x="100" y="80" text-anchor="middle" font-size="12" fill="#7f4c1a" font-style="italic">Les Minquiers</text>
+        <text x="100" y="100" text-anchor="middle" font-size="10" fill="#c0392b">✕</text>
+        <text x="100" y="125" text-anchor="middle" font-size="9" fill="#6c8a9a"
+              font-family="Courier New,monospace">49°N — 2°O</text>
+      </svg>
+    </div>
+
+    <button id="btn-endgame-restart" class="btn btn-primary">
+      ⚓ Reprendre la mer
+    </button>
+  </div>
+</section>
+
+<script src="game.js"></script>
+
+<!-- Script inline pour connecter les éléments non-couverts par attachGlobalEvents -->
+<script>
+  // Mise à jour du compteur de progression sur la carte
+  function updateMapProgress() {
+    if (typeof state === 'undefined' || typeof story === 'undefined' || !story) return;
+    const done = state.completed.filter(Boolean).length;
+    const total = story.ports.length;
+    const el = document.getElementById('map-progress');
+    if (el) el.textContent = `${done}/${total} escales`;
+  }
+
+  // Observer les transitions d'écran pour mettre à jour le compteur
+  const origGoto = window.goto;
+  document.addEventListener('DOMContentLoaded', () => {
+    // Patch renderMap pour mettre à jour le compteur
+    const observer = new MutationObserver(() => {
+      if (document.getElementById('screen-map').classList.contains('active')) {
+        setTimeout(updateMapProgress, 50);
+      }
+    });
+    observer.observe(document.getElementById('screen-map'), { attributes: true });
+  });
+</script>
+
+</body>
+</html>
