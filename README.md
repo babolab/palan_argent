@@ -5,6 +5,11 @@
 
 **🎮 [Jouer en ligne](https://babolab.github.io/palan_argent/)** ← GitHub Pages
 
+<p align="center">
+  <img src="assets/qrcode.png" width="180" alt="QR code — babolab.github.io/palan_argent"/>
+  <br><sub>Scanner pour jouer sur mobile</sub>
+</p>
+
 ---
 
 ## Le jeu
