@@ -95,6 +95,9 @@ function resetGame() {
 // NAVIGATION ENTRE ÉCRANS
 // ============================================================
 function goto(screenName) {
+  // Annuler le timeout de navigation si on quitte l'écran sailing
+  if (sailingTimeout) { clearTimeout(sailingTimeout); sailingTimeout = null; }
+
   // Masquer tous les écrans
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
@@ -159,22 +162,20 @@ function renderMap() {
   const svg = document.getElementById('main-map');
   if (!svg) return;
 
+  const nextIdx = getCurrentPortIndex();
+
   // Mettre à jour les ports sur la carte SVG
   story.ports.forEach((port, i) => {
-    const portEl = svg.querySelector(`#port-${port.id}`);
+    // getElementById cherche dans tout le document (y compris le SVG inline)
+    const portEl = document.getElementById(`port-${port.id}`);
     if (!portEl) return;
 
     portEl.classList.remove('locked', 'completed', 'current', 'available');
 
     if (state.completed[i]) {
       portEl.classList.add('completed');
-    } else if (i === 0 || state.completed[i - 1]) {
-      // Port disponible = premier port ou port suivant le dernier complété
-      if (i === getCurrentPortIndex()) {
-        portEl.classList.add('current');
-      } else {
-        portEl.classList.add('available');
-      }
+    } else if (i === 0 || (i > 0 && state.completed[i - 1])) {
+      portEl.classList.add(i === nextIdx ? 'current' : 'available');
     } else {
       portEl.classList.add('locked');
     }
@@ -254,9 +255,17 @@ function renderSailing() {
     destEl.textContent = story.ports[idx].name;
   }
 
+  // Réinitialiser l'animation de la barre de progression
+  const bar = document.querySelector('.nav-progress-bar');
+  if (bar) {
+    bar.style.animation = 'none';
+    bar.getBoundingClientRect(); // force reflow
+    bar.style.animation = '';
+  }
+
   // Après 2.5s, aller au port
-  if (sailingTimeout) clearTimeout(sailingTimeout);
   sailingTimeout = setTimeout(() => {
+    sailingTimeout = null;
     goto(STATES.PORT);
   }, 2500);
 }
@@ -860,26 +869,36 @@ function attachMapPortEvents() {
   story.ports.forEach((port, i) => {
     const el = document.getElementById(`port-${port.id}`);
     if (!el) return;
+    el.dataset.clickCount = '0';
+
     el.addEventListener('click', () => {
       if (el.classList.contains('locked')) return;
+
+      // Easter egg : 3 clics sur Aurigny → avertissement du Raz Blanchard
+      if (port.id === 'aurigny') {
+        el.dataset.clickCount = String(parseInt(el.dataset.clickCount || '0') + 1);
+        if (parseInt(el.dataset.clickCount) >= 3) {
+          alert('⚠️ Hippolyte te crie dessus :\n« Fais gaffe au Raz Blanchard, espèce de terrestre ! Ces courants ont avalé de meilleurs marins que toi ! »');
+          el.dataset.clickCount = '0';
+          return;
+        }
+      }
+
       state.currentPortIndex = i;
       state.dialogueLine = 0;
       save();
+
       if (state.completed[i]) {
-        // Port déjà visité → dialogue rapide + retour carte
+        // Port déjà visité → revoir le dialogue
         goto(STATES.PORT);
       } else if (i === 0 || state.completed[i - 1]) {
         goto(STATES.SAILING);
       }
     });
-    // Easter egg : Raz Blanchard (clic 3× sur Aurigny)
-    el.dataset.clickCount = 0;
-    el.addEventListener('click', () => {
-      el.dataset.clickCount = parseInt(el.dataset.clickCount || 0) + 1;
-      if (parseInt(el.dataset.clickCount) >= 3 && port.id === 'aurigny') {
-        alert('⚠️ Hippolyte te crie dessus : « Fais gaffe au Raz Blanchard, espèce de terrestre ! Ces courants ont avalé de meilleurs marins que toi ! »');
-        el.dataset.clickCount = 0;
-      }
+
+    // Navigation clavier (Enter/Space)
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') el.click();
     });
   });
 }
