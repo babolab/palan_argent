@@ -201,9 +201,9 @@ function updateBoatPosition() {
   if (!boat || !story) return;
   const idx = getCurrentPortIndex();
   const port = story.ports[Math.min(idx, story.ports.length - 1)];
-  // Les coords sont en % de la viewbox 800×600
+  // Les coords sont en % de la viewbox 800×839
   const x = (port.coords.x / 100) * 800;
-  const y = (port.coords.y / 100) * 600;
+  const y = (port.coords.y / 100) * 839;
   boat.setAttribute('transform', `translate(${x - 10},${y - 18})`);
 }
 
