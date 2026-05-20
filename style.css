@@ -168,6 +168,23 @@ body {
 }
 .btn-secondary:hover { background: rgba(255,255,255,0.2); }
 
+/* Boutons secondaires sur fond clair (cartes port, énigme, journal, fin) */
+.port-card .btn-secondary,
+.riddle-card .btn-secondary,
+.logbook-inner .btn-secondary,
+.endgame-card .btn-secondary {
+  background: rgba(44,62,80,0.06);
+  color: var(--chart-line);
+  border: 1px solid rgba(44,62,80,0.22);
+}
+.port-card .btn-secondary:hover,
+.riddle-card .btn-secondary:hover,
+.logbook-inner .btn-secondary:hover {
+  background: rgba(44,62,80,0.13);
+  color: var(--chart-line);
+  transform: none;
+}
+
 .btn-option {
   display: flex;
   width: 100%;
@@ -247,6 +264,7 @@ body {
 #screen-map {
   background: var(--sea-deep);
   padding: 1rem;
+  max-width: 1400px; /* Plus large que les autres écrans */
 }
 
 .map-header {
@@ -268,7 +286,7 @@ body {
 
 .map-container {
   width: 100%;
-  max-width: 860px;
+  max-width: 1100px; /* Carte plus grande sur PC */
   position: relative;
 }
 
@@ -819,6 +837,43 @@ body {
   white-space: nowrap;
 }
 .fragment-notif.show { transform: translateX(-50%) translateY(0); }
+
+/* ============================================================
+   LAYOUT PC — grand écran (> 1024px)
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* Tous les écrans peuvent s'étaler */
+  .screen { max-width: 1200px; }
+
+  /* Cartes de contenu plus larges */
+  .port-card, .riddle-card { max-width: 900px; }
+  .prologue-card, .logbook-inner { max-width: 800px; }
+  .endgame-card { max-width: 760px; }
+
+  /* Port : scène plus haute */
+  .port-scene { min-height: 280px; padding: 2.5rem 2rem; }
+
+  /* Centering confortable */
+  #screen-port, #screen-riddle, #screen-prologue, #screen-logbook, #screen-endgame {
+    justify-content: center;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Titre plus généreux */
+  .title-logo { font-size: 5.5rem; }
+  .title-main { font-size: 3.2rem; }
+  .title-desc { font-size: 1.05rem; max-width: 580px; }
+
+  /* Journal plus haut */
+  .logbook-entries { max-height: 70vh; }
+
+  /* Riddle body plus d'espace */
+  .riddle-body { padding: 2rem; }
+  .riddle-text { font-size: 1.1rem; }
+  .port-header { padding: 1.4rem 2rem; }
+  .port-actions { padding: 1rem 2rem 1.5rem; }
+  .riddle-actions { padding: 1.2rem 2rem 1.8rem; }
+}
 
 /* ============================================================
    RESPONSIVE
