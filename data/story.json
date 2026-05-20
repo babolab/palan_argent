@@ -4,7 +4,7 @@
       "id": "cherbourg",
       "name": "Cherbourg-Chantereyne",
       "region": "Cotentin",
-      "coords": { "x": 76.5, "y": 23.0 },
+      "coords": { "x": 72.9, "y": 20.1 },
       "pnj": { "name": "Marcel", "emoji": "⚓", "role": "Capitaine de port" },
       "dialogue": [
         "Ah, te v'là, moussaillon. T'as l'air aussi perdu qu'un foc dans une risée.",
@@ -27,7 +27,7 @@
       "id": "barfleur",
       "name": "Barfleur",
       "region": "Cotentin",
-      "coords": { "x": 90.0, "y": 20.4 },
+      "coords": { "x": 93.1, "y": 18.5 },
       "pnj": { "name": "Odette", "emoji": "☕", "role": "Patronne du café-tabac" },
       "dialogue": [
         "Alors comme ça, t'as reçu le carnet du Palan ? Ce vieux filou m'avait promis de m'épouser.",
@@ -50,7 +50,7 @@
       "id": "saint-vaast",
       "name": "Saint-Vaast-la-Hougue",
       "region": "Cotentin",
-      "coords": { "x": 91.4, "y": 30.9 },
+      "coords": { "x": 96.25, "y": 23.0 },
       "pnj": { "name": "Gaston", "emoji": "🦪", "role": "Ostréiculteur philosophe" },
       "dialogue": [
         "Les huîtres, mon fils, elles s'ouvrent à marée montante. Hippolyte le savait.",
@@ -73,7 +73,7 @@
       "id": "aurigny",
       "name": "Braye Harbour, Aurigny",
       "region": "Alderney",
-      "coords": { "x": 16.75, "y": 25.1 },
+      "coords": { "x": 36.6, "y": 16.1 },
       "pnj": { "name": "Dotty", "emoji": "🚢", "role": "Capitaine du port" },
       "dialogue": [
         "Welcome — euh, bienvenue. Hippolyte, yes, he came here. Left a message.",
@@ -96,7 +96,7 @@
       "id": "granville",
       "name": "Granville",
       "region": "Cotentin",
-      "coords": { "x": 90.4, "y": 67.0 },
+      "coords": { "x": 74.0, "y": 64.4 },
       "pnj": { "name": "Prosper", "emoji": "🦐", "role": "Pêcheur de crevettes" },
       "dialogue": [
         "La porte du bassin s'ouvre à PM ± 2h30. Le Palan avait le sens du timing.",
@@ -119,7 +119,7 @@
       "id": "chausey",
       "name": "Sound de Chausey",
       "region": "Archipel Chausey",
-      "coords": { "x": 60.9, "y": 66.1 },
+      "coords": { "x": 59.4, "y": 62.5 },
       "pnj": { "name": "La Pyramide", "emoji": "🔺", "role": "Amer séculaire" },
       "dialogue": [
         "Tu mouilles dans le Sound. Il est 19h00. La pyramide blanche se découpe sur le ciel orange.",
@@ -143,7 +143,7 @@
       "id": "saint-helier",
       "name": "Saint-Hélier",
       "region": "Jersey",
-      "coords": { "x": 43.25, "y": 59.1 },
+      "coords": { "x": 41.4, "y": 45.4 },
       "pnj": { "name": "Inspecteur Dorey", "emoji": "🛂", "role": "Douanier jersiais" },
       "dialogue": [
         "Passeport, please. ETA soumise ? Formulaire de déclaration ? Non ?",
@@ -166,7 +166,7 @@
       "id": "saint-peter-port",
       "name": "Saint-Peter Port",
       "region": "Guernesey",
-      "coords": { "x": 17.25, "y": 50.2 },
+      "coords": { "x": 15.0, "y": 30.4 },
       "pnj": { "name": "Hippolyte le Palan", "emoji": "👻", "role": "Corsaire raté (fantôme)" },
       "dialogue": [
         "Alors t'es arrivé jusqu'ici. Pas mal pour un mousse de ton espèce.",

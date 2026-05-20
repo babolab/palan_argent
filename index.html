@@ -84,98 +84,98 @@
       <!-- Routes de navigation (pointillés) — superposées sur la carte réelle -->
       <g opacity="0.45" stroke="#1a3a5c" stroke-width="1.5" stroke-dasharray="6,4" fill="none">
         <!-- Cherbourg → Barfleur -->
-        <path d="M 612,193 Q 666,210 720,171"/>
-        <!-- Barfleur → Saint-Vaast -->
-        <path d="M 720,171 Q 725,242 731,259"/>
-        <!-- Saint-Vaast → Aurigny (longue traversée) -->
-        <path d="M 731,259 Q 432,263 134,211"/>
+        <path d="M 583,169 Q 664,177 745,155"/>
+        <!-- Barfleur → St-Vaast -->
+        <path d="M 745,155 Q 757,189 770,193"/>
+        <!-- St-Vaast → Aurigny (longue traversée) -->
+        <path d="M 770,193 Q 531,179 293,135"/>
         <!-- Aurigny → Granville (diagonale) -->
-        <path d="M 134,211 Q 428,414 723,562"/>
+        <path d="M 293,135 Q 442,352 592,540"/>
         <!-- Granville → Chausey -->
-        <path d="M 723,562 Q 605,586 487,555"/>
-        <!-- Chausey → Saint-Hélier -->
-        <path d="M 487,555 Q 416,554 346,496"/>
-        <!-- Saint-Hélier → Saint-Peter Port -->
-        <path d="M 346,496 Q 242,486 138,421"/>
+        <path d="M 592,540 Q 533,547 475,524"/>
+        <!-- Chausey → St-Hélier -->
+        <path d="M 475,524 Q 403,467 331,381"/>
+        <!-- St-Hélier → St-Peter Port -->
+        <path d="M 331,381 Q 225,333 120,255"/>
       </g>
 
       <!-- PORTS — groupes cliquables (coordonnées recalées sur la carte SHOM) -->
 
-      <!-- 0 · Cherbourg — cx=612, cy=193 -->
+      <!-- 0 · Cherbourg — cx=583, cy=169 -->
       <g id="port-cherbourg" class="map-port locked" role="button" tabindex="0"
          aria-label="Cherbourg-Chantereyne — Port de départ">
-        <circle cx="612" cy="193" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="612" y="178" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="583" cy="169" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="583" y="154" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">Cherbourg</text>
-        <circle cx="623" cy="185" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9"/>
+        <circle cx="594" cy="161" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9"/>
       </g>
 
-      <!-- 1 · Barfleur — cx=720, cy=171 -->
+      <!-- 1 · Barfleur — cx=745, cy=155 (décalé de 760 pour éviter chevauchement) -->
       <g id="port-barfleur" class="map-port locked" role="button" tabindex="0"
          aria-label="Barfleur — Phare historique">
-        <circle cx="720" cy="171" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="720" y="156" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="745" cy="155" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="745" y="140" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">Barfleur</text>
-        <circle cx="731" cy="163" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:0.5s"/>
+        <circle cx="756" cy="147" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:0.5s"/>
       </g>
 
-      <!-- 2 · Saint-Vaast — cx=731, cy=259 -->
+      <!-- 2 · Saint-Vaast — cx=770, cy=193 (décalé de 761 pour éviter chevauchement) -->
       <g id="port-saint-vaast" class="map-port locked" role="button" tabindex="0"
          aria-label="Saint-Vaast-la-Hougue — Île Tatihou">
-        <circle cx="731" cy="259" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="731" y="244" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="770" cy="193" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="770" y="178" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">St-Vaast</text>
-        <circle cx="742" cy="251" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:1s"/>
+        <circle cx="781" cy="185" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:1s"/>
       </g>
 
-      <!-- 3 · Aurigny — cx=134, cy=211 -->
+      <!-- 3 · Aurigny — cx=293, cy=135 -->
       <g id="port-aurigny" class="map-port locked" role="button" tabindex="0"
          aria-label="Braye Harbour, Aurigny">
-        <circle cx="134" cy="211" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="134" y="196" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="293" cy="135" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="293" y="120" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">Aurigny</text>
-        <circle cx="145" cy="203" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:1.5s"/>
+        <circle cx="304" cy="127" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:1.5s"/>
       </g>
 
-      <!-- 4 · Granville — cx=723, cy=562 -->
+      <!-- 4 · Granville — cx=592, cy=540 -->
       <g id="port-granville" class="map-port locked" role="button" tabindex="0"
          aria-label="Granville — Porte abattante">
-        <circle cx="723" cy="562" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="723" y="547" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="592" cy="540" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="592" y="525" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">Granville</text>
-        <circle cx="734" cy="554" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:2s"/>
+        <circle cx="603" cy="532" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:2s"/>
       </g>
 
-      <!-- 5 · Chausey — cx=487, cy=555 -->
+      <!-- 5 · Chausey — cx=475, cy=524 -->
       <g id="port-chausey" class="map-port locked" role="button" tabindex="0"
          aria-label="Sound de Chausey">
-        <circle cx="487" cy="555" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="487" y="540" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="475" cy="524" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="475" y="509" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">Chausey</text>
-        <polygon points="487,529 481,541 493,541" fill="#f39c12" opacity="0.7"/>
+        <polygon points="475,498 469,510 481,510" fill="#f39c12" opacity="0.7"/>
       </g>
 
-      <!-- 6 · Saint-Hélier — cx=346, cy=496 -->
+      <!-- 6 · Saint-Hélier — cx=331, cy=381 -->
       <g id="port-saint-helier" class="map-port locked" role="button" tabindex="0"
          aria-label="Saint-Hélier, Jersey">
-        <circle cx="346" cy="496" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="346" y="481" text-anchor="middle" font-size="11" fill="white"
+        <circle cx="331" cy="381" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="331" y="366" text-anchor="middle" font-size="11" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">St-Hélier</text>
-        <circle cx="357" cy="488" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:0.8s"/>
+        <circle cx="342" cy="373" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:0.8s"/>
       </g>
 
-      <!-- 7 · Saint-Peter Port — cx=138, cy=421 -->
+      <!-- 7 · Saint-Peter Port — cx=120, cy=255 -->
       <g id="port-saint-peter-port" class="map-port locked" role="button" tabindex="0"
          aria-label="Saint-Peter Port, Guernesey — Destination finale">
-        <circle cx="138" cy="421" r="10" fill="#666" stroke="white" stroke-width="2"/>
-        <text x="138" y="406" text-anchor="middle" font-size="10" fill="white"
+        <circle cx="120" cy="255" r="10" fill="#666" stroke="white" stroke-width="2"/>
+        <text x="120" y="240" text-anchor="middle" font-size="10" fill="white"
               font-family="Georgia,serif" font-weight="bold" stroke="#1a3a5c" stroke-width="3" paint-order="stroke">St-Peter Port</text>
-        <text x="138" y="419" text-anchor="middle" font-size="8" fill="#f39c12">🏆</text>
-        <circle cx="149" cy="413" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:2.5s"/>
+        <text x="120" y="253" text-anchor="middle" font-size="8" fill="#f39c12">🏆</text>
+        <circle cx="131" cy="247" r="3" fill="#f39c12" class="lighthouse-blink" opacity="0.9" style="animation-delay:2.5s"/>
       </g>
 
       <!-- Voilier (position départ : Cherbourg) -->
-      <g id="boat-svg" transform="translate(602,165)">
+      <g id="boat-svg" transform="translate(573,149)">
         <text font-size="18" fill="white" opacity="0.9">⛵</text>
       </g>
 
