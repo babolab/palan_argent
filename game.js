@@ -748,7 +748,9 @@ function goToNextPort() {
 function showFragmentNotif(portIdx) {
   const notif = document.getElementById('fragment-notif');
   if (!notif) return;
-  notif.textContent = `Fragment ${portIdx + 1}/7 obtenu ! 🗺️`;
+  // Ports 0-6 = fragments 1-7 ; port 7 = fin (pas de nouveau fragment numéroté)
+  const num = Math.min(portIdx + 1, 7);
+  notif.textContent = portIdx < 7 ? `Fragment ${num}/7 obtenu ! 🗺️` : `Carte complète ! 🏴‍☠️`;
   notif.classList.add('show');
   setTimeout(() => notif.classList.remove('show'), 3000);
 }
@@ -819,8 +821,7 @@ function attachGlobalEvents() {
     state.dialogueLine = 0;
     state.currentPortIndex = 0;
     save();
-    // Léger délai pour que l'animation CSS de sortie se termine
-    setTimeout(() => goto(STATES.MAP), 80);
+    goto(STATES.MAP);
   });
 
   // ---- Carte ----
