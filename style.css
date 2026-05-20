@@ -343,7 +343,7 @@ body {
    ============================================================ */
 #screen-port {
   background: linear-gradient(160deg, var(--sea-deep) 0%, #0d2238 100%);
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 1rem 3rem;
   justify-content: center;
 }
 

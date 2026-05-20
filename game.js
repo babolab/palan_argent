@@ -819,7 +819,8 @@ function attachGlobalEvents() {
     state.dialogueLine = 0;
     state.currentPortIndex = 0;
     save();
-    goto(STATES.MAP);
+    // Léger délai pour que l'animation CSS de sortie se termine
+    setTimeout(() => goto(STATES.MAP), 80);
   });
 
   // ---- Carte ----
